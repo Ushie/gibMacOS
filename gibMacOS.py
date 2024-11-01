@@ -287,10 +287,19 @@ class gibMacOS:
             if v.lower() != "unknown":
                 prodd["version"] = v
             prod_list.append(prodd)
-        # Sort by newest
-        prod_list = sorted(prod_list, key=lambda x:x["time"], reverse=True)
-        return prod_list
+            
+        # Sort by version
+        prod_list = sorted(prod_list, key=lambda x: x["version"], reverse=True)
 
+        # Filter to the latest of each product
+        latest_products = {}
+        for product in prod_list:
+            product_name = product["title"]
+            if product_name not in latest_products:
+                latest_products[product_name] = product
+                
+        return list(latest_products.values())
+    
     def download_prod(self, prod, dmg = False):
         # Takes a dictonary of details and downloads it
         self.resize()
